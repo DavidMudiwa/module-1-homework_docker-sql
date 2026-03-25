@@ -1,29 +1,66 @@
-select * from green_trips 
-where lpep_pickup_datetime = '2025-11-18' limit 1;
+SELECT
+  *
+FROM
+  green_trips
+WHERE
+  lpep_pickup_datetime = '2025-11-18'
+LIMIT
+  1;
 
-select * from taxi_zone
-select count(*) from green_trips
-where lpep_pickup_datetime >= '2025-11-01' and lpep_pickup_datetime < '2025-12-01' and trip_distance <= 1
+--Q3
+SELECT
+  *
+FROM
+  taxi_zone
+SELECT
+  COUNT(*)
+FROM
+  green_trips
+WHERE
+  lpep_pickup_datetime >= '2025-11-01'
+  AND lpep_pickup_datetime < '2025-12-01'
+  AND trip_distance <= 1
 
-select lpep_pickup_datetime, sum(trip_distance) from green_trips
-where trip_distance < 100
-group by lpep_pickup_datetime
-order by sum(trip_distance) desc
+  --Q4
+SELECT
+  lpep_pickup_datetime,
+  SUM(trip_distance)
+FROM
+  green_trips
+WHERE
+  trip_distance < 100
+GROUP BY
+  lpep_pickup_datetime
+ORDER BY
+  SUM(trip_distance) DESC
 
-
-SELECT gt."PULocationID", sum(gt.total_amount), tz."Zone"
-FROM green_trips gt
-INNER JOIN taxi_zone tz
-  ON gt."PULocationID" = tz."LocationID"
-WHERE gt."lpep_pickup_datetime" >= '2025-11-18'
+  --Q5
+SELECT
+  gt."PULocationID",
+  SUM(gt.total_amount),
+  tz."Zone"
+FROM
+  green_trips gt
+  INNER JOIN taxi_zone tz ON gt."PULocationID" = tz."LocationID"
+WHERE
+  gt."lpep_pickup_datetime" >= '2025-11-18'
   AND gt."lpep_pickup_datetime" < '2025-11-19'
-group by gt."PULocationID", tz."Zone"
-ORDER BY sum(gt.total_amount) DESC;
+GROUP BY
+  gt."PULocationID",
+  tz."Zone"
+ORDER BY
+  SUM(gt.total_amount) DESC;
 
-select tz."Zone", gt."tip_amount"
-FROM green_trips gt
-INNER JOIN taxi_zone tz
-  ON gt."DOLocationID" = tz."LocationID"
-WHERE gt."lpep_pickup_datetime" >= '2025-11-01'
+--Q6
+SELECT
+  dz."Zone",
+  gt."tip_amount"
+FROM
+  green_trips gt
+  INNER JOIN taxi_zone pu ON gt."PULocationID" = pu."LocationID"
+  INNER JOIN taxi_zone dz ON gt."DOLocationID" = dz."LocationID"
+WHERE
+  gt."lpep_pickup_datetime" >= '2025-11-01'
   AND gt."lpep_pickup_datetime" < '2025-12-01'
-  and gt."PULocationID" = '74'
+  AND pu."Zone" = 'East Harlem North'
+order by  gt."tip_amount" desc
