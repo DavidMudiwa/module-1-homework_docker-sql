@@ -64,3 +64,4 @@ WHERE
   AND gt."lpep_pickup_datetime" < '2025-12-01'
   AND pu."Zone" = 'East Harlem North'
 order by  gt."tip_amount" desc
+limit 1;
